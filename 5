@@ -1,0 +1,26 @@
+function searchErrors() {
+  const dateInput = document.getElementById("date").value;
+
+  // Read the text file
+  fetch("data.txt")
+    .then(response => response.text())
+    .then(data => {
+      // Split the data into rows
+      const rows = data.split("\n");
+
+      let results = "";
+      for (const row of rows) {
+        const columns = row.split(",");
+
+        // Check if the date matches
+        if (columns[1] === dateInput) {
+          results += `Error Type: ${columns[2]}<br>`;
+        }
+      }
+
+      // Display the results
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = results;
+    })
+    .catch(error => console.error("Error reading file:", error));
+}
