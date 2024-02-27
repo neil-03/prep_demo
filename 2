@@ -1,0 +1,35 @@
+function searchErrors() {
+  // 1. Get the entered date
+  const searchDate = document.getElementById("searchDate").value;
+
+  // 2. Prepare the request data (date)
+  const data = { date: searchDate };
+
+  // 3. Send an AJAX request to the server-side script (e.g., PHP)
+  fetch("/search.php", {
+    method: "POST",
+    body: JSON.stringify(data),
+  })
+    .then(response => response.json())
+    .then(data => {
+      // 4. Display the received error data
+      const resultsContainer = document.getElementById("searchResults");
+      resultsContainer.innerHTML = ""; // Clear previous results
+
+      if (data.length > 0) {
+        // Display retrieved error types
+        let resultString = "<h2>Found Error Types:</h2><ul>";
+        for (const error of data) {
+          resultString += `<li>${error.error_type}</li>`;
+        }
+        resultString += "</ul>";
+        resultsContainer.innerHTML = resultString;
+      } else {
+        resultsContainer.innerHTML = "No errors found for the selected date.";
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching data:", error);
+      // Handle potential errors during communication
+    });
+}
