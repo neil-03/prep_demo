@@ -1,0 +1,28 @@
+<?php
+// 1. Connect to your MySQL database (replace with your credentials)
+$servername = "localhost";
+$username = "your_username";
+$password = "your_password";
+$dbname = "your_database_name";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// 2. Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+// 3. Receive data from the AJAX request
+$data = json_decode(file_get_contents('php://input'), true);
+$searchDate = $data["date"];
+
+// 4. Prepare the SQL query
+$sql = "SELECT error_type FROM your_table_name WHERE date = '$searchDate'";
+
+// 5. Run the query and fetch results
+$result = $conn->query($sql);
+$errors = [];
+if ($result->num_rows > 0) {
+  while($row = $result->fetch_assoc()) {
+    $errors[] = $row;
+  }
